@@ -1,23 +1,40 @@
 import { defineStore } from 'pinia'
 
-const URL = 'https:api.themoviedb.org/3/search/movie?api_key=02708c4929ad93aa5e68f8ee7bfa4445&query='
-// const URL = 'http://127.0.0.1:38080/facade/dataport/dashboard/by-inn?inn='
+// Example:
+//
+// fetch('https://api.themoviedb.org/3/discover/movie?api_key=&query=', options)
+//   .then(response => response.json())
+//   .then(response => console.log(response))
+//   .catch(err => console.error(err));
+
+// const options = {
+//   method: 'GET',
+//   headers: {
+//     accept: 'application/json',
+//     Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ODVjMDk0MDg0NjJkNGNhMmJhZTA4ZTJjMmJkMWU0NiIsInN1YiI6IjVmOGQ1MTM0Y2I4MDI4MDAzNzA4NTU4MCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.xNF4FfNkRVzBHZ4RAEpsqhghZK3iHI__u1-Y-SVV2Ow'
+//   }
+// }
+
+const URL = 'https://api.themoviedb.org/3/search/movie?api_key=685c09408462d4ca2bae08e2c2bd1e46&query='
 
 export const useSearchStore = defineStore('searchStore', {
   state: () => ({
+    loader: false,
     movies: []
   }),
 
   actions: {
     async getMovies(search) {
-      const res = await fetch(`${URL}${search}`, {
-        mode: 'no-cors'
-      })
+      this.loader = true
+
+      const res = await fetch(`${URL}${search}`)
       const data = await res.json()
 
       console.log(data)
 
-      // this.movies = data
+      this.movies = data.results
+
+      this.loader = false
     }
   }
 })
